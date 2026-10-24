@@ -1,0 +1,264 @@
+<!-- <!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#142744">
+  <meta name="description" content="Estimate a credit score category with PaisaBazaar.">
+  <title>PaisaBazaar | Credit Analysis</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet">
+</head>
+<body>
+<div class="app-shell">
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="/" aria-label="PaisaBazaar home">
+        <span class="brand-mark">P</span><span><span class="brand-name">PaisaBazaar</span><span class="brand-tag">Credit intelligence</span></span>
+      </a>
+      <nav class="nav-links" aria-label="Main navigation">
+        <a class="nav-link" href="/dashboard">Dashboard</a>
+        <a class="nav-link" href="/">Overview</a>
+        <a class="nav-link active" href="/predict">Credit analysis</a>
+        <a class="nav-cta" href="/predict">Run prediction <span aria-hidden="true">↗</span></a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="page-wrap">
+    <div class="page-heading">
+      <div>
+        <div class="eyebrow">Credit profile assessment</div>
+        <h1>Credit score prediction</h1>
+        <p>Enter the profile details below. The model will use these 11 inputs to estimate a credit score category.</p>
+      </div>
+      <div class="date-pill"><span aria-hidden="true">▣</span> 11 input features</div>
+    </div>
+
+    {% if prediction %}
+    <section class="result-card" role="status" aria-live="polite">
+      <div class="result-label">Prediction complete</div>
+      <div class="result-value">{{ prediction }}</div>
+      <p class="result-copy">This is the category predicted by the project's Random Forest model for the values submitted.</p>
+    </section>
+    {% endif %}
+    {% if error_message %}
+    <div class="alert-error" role="alert"><strong>We couldn't process those values.</strong>{{ error_message }}</div>
+    {% endif %}
+
+    <section class="form-layout">
+      <form method="POST" action="/predict" class="panel form-panel" novalidate>
+        <section class="form-section" style="margin-top:0;padding-top:0;border-top:0">
+          <div class="form-section-title"><span class="section-number">01</span><div><h3>Personal & income details</h3><p>Basic profile and monthly earning information</p></div></div>
+          <div class="field-grid">
+            <div class="field"><label for="age">Age</label><input id="age" type="number" step="any" min="0" name="age" value="{{ submitted_values.get('age', '') }}" placeholder="e.g. 28" required><span class="field-hint">Age in years</span></div>
+            <div class="field"><label for="annual_income">Annual income</label><input id="annual_income" type="number" step="any" min="0" name="annual_income" value="{{ submitted_values.get('annual_income', '') }}" placeholder="e.g. 75000" required><span class="field-hint">Use the same units as the dataset</span></div>
+            <div class="field"><label for="monthly_salary">Monthly in-hand salary</label><input id="monthly_salary" type="number" step="any" min="0" name="monthly_salary" value="{{ submitted_values.get('monthly_salary', '') }}" placeholder="e.g. 5200" required></div>
+          </div>
+        </section>
+
+        <section class="form-section">
+          <div class="form-section-title"><span class="section-number">02</span><div><h3>Banking & credit</h3><p>Accounts, cards and interest rate information</p></div></div>
+          <div class="field-grid">
+            <div class="field"><label for="num_bank_accounts">Number of bank accounts</label><input id="num_bank_accounts" type="number" step="any" min="0" name="num_bank_accounts" value="{{ submitted_values.get('num_bank_accounts', '') }}" placeholder="e.g. 3" required></div>
+            <div class="field"><label for="num_credit_cards">Number of credit cards</label><input id="num_credit_cards" type="number" step="any" min="0" name="num_credit_cards" value="{{ submitted_values.get('num_credit_cards', '') }}" placeholder="e.g. 2" required></div>
+            <div class="field"><label for="interest_rate">Interest rate (%)</label><input id="interest_rate" type="number" step="any" min="0" name="interest_rate" value="{{ submitted_values.get('interest_rate', '') }}" placeholder="e.g. 12" required></div>
+            <div class="field"><label for="num_loans">Number of loans</label><input id="num_loans" type="number" step="any" min="0" name="num_loans" value="{{ submitted_values.get('num_loans', '') }}" placeholder="e.g. 1" required></div>
+          </div>
+        </section>
+
+        <section class="form-section">
+          <div class="form-section-title"><span class="section-number">03</span><div><h3>Repayment & outstanding balance</h3><p>Payment history and credit utilization signals</p></div></div>
+          <div class="field-grid">
+            <div class="field"><label for="delay_days">Delay from due date (days)</label><input id="delay_days" type="number" step="any" name="delay_days" value="{{ submitted_values.get('delay_days', '') }}" placeholder="e.g. 5" required></div>
+            <div class="field"><label for="delayed_payments">Number of delayed payments</label><input id="delayed_payments" type="number" step="any" min="0" name="delayed_payments" value="{{ submitted_values.get('delayed_payments', '') }}" placeholder="e.g. 2" required></div>
+            <div class="field"><label for="outstanding_debt">Outstanding debt</label><input id="outstanding_debt" type="number" step="any" min="0" name="outstanding_debt" value="{{ submitted_values.get('outstanding_debt', '') }}" placeholder="e.g. 1200" required></div>
+            <div class="field"><label for="credit_utilization">Credit utilization ratio (%)</label><input id="credit_utilization" type="number" step="any" min="0" name="credit_utilization" value="{{ submitted_values.get('credit_utilization', '') }}" placeholder="e.g. 32.5" required><span class="field-hint">Enter the ratio in the format expected by your dataset</span></div>
+          </div>
+        </section>
+        <div class="form-actions"><button type="submit" class="btn-premium">Predict credit category <span aria-hidden="true">→</span></button><span class="form-note">Check the values before submitting.</span></div>
+      </form>
+
+      <aside>
+        <div class="panel info-card">
+          <div class="eyebrow">How it works</div>
+          <h3>A clearer view of credit signals.</h3>
+          <p>Your entries are passed to the existing Random Forest classifier. The model returns one of the credit categories learned from the dataset.</p>
+          <div class="feature-list">
+            <div class="feature-row"><span class="feature-check">1</span><div><strong>Enter profile details</strong><span>Complete all required numeric fields using units consistent with the training dataset.</span></div></div>
+            <div class="feature-row"><span class="feature-check">2</span><div><strong>Run the model</strong><span>The same 11 model features are sent in the original feature order.</span></div></div>
+            <div class="feature-row"><span class="feature-check">3</span><div><strong>Review the result</strong><span>The predicted category appears above the form after submission.</span></div></div>
+          </div>
+          <div class="privacy-note"><span aria-hidden="true">ⓘ</span><div><b>Important note</b><br>This project output is an ML estimate, not an official credit score, lending decision, or financial advice. Avoid entering real sensitive personal information.</div></div>
+        </div>
+        <div class="side-cta"><h4>Want to review the dataset?</h4><p>Open the dashboard to review model performance and credit category distribution.</p><a class="btn-outline-premium" href="/dashboard">Open dashboard <span aria-hidden="true">→</span></a></div>
+      </aside>
+    </section>
+  </main>
+  <footer class="footer"><div class="footer-inner"><span><strong>PaisaBazaar</strong> · Credit intelligence project</span><span>Predictions are estimates, not an official credit score.</span></div></footer>
+</div>
+<script>
+// Native browser validation helps users catch missing or malformed entries before submit.
+(() => {
+  const form = document.querySelector('form');
+  if (!form) return;
+  form.addEventListener('submit', (event) => {
+    if (!form.checkValidity()) {
+      event.preventDefault();
+      form.reportValidity();
+    }
+  });
+})();
+</script>
+</body>
+</html> -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#142744">
+  <meta name="description" content="Estimate a credit score category with PaisaBazaar.">
+  <title>PaisaBazaar | Credit Analysis</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet">
+</head>
+<body>
+<div class="app-shell">
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="/" aria-label="PaisaBazaar home">
+        <span class="brand-mark">P</span><span><span class="brand-name">PaisaBazaar</span><span class="brand-tag">Credit intelligence</span></span>
+      </a>
+      <nav class="nav-links" aria-label="Main navigation">
+        <a class="nav-link" href="/">Home</a>
+        <a class="nav-link" href="/dashboard">Dashboard</a>
+        <a class="nav-link" href="/overview">Overview</a>
+        <a class="nav-link active" href="/predict">Credit analysis</a>
+        <a class="nav-link" href="/purchase-planner">Purchase planner</a>
+        <a class="nav-cta" href="/predict">Run prediction <span aria-hidden="true">↗</span></a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="page-wrap">
+    <div class="page-heading">
+      <div>
+        <div class="eyebrow">Credit profile assessment</div>
+        <h1>Credit score prediction</h1>
+        <p>Enter the profile details below. The model will use these 11 inputs to estimate a credit score category.</p>
+      </div>
+      <div class="date-pill"><span aria-hidden="true">▣</span> 11 input features</div>
+    </div>
+
+    {% if prediction %}
+    <section class="result-card" role="status" aria-live="polite">
+      <div class="result-label">Prediction complete</div>
+      <div class="result-value">{{ prediction }}</div>
+      <p class="result-copy">This is the category predicted by the project's Random Forest model for the values submitted.</p>
+    </section>
+    {% endif %}
+    {% if error_message %}
+    <div class="alert-error" role="alert"><strong>We couldn't process those values.</strong>{{ error_message }}</div>
+    {% endif %}
+
+    <section class="form-layout">
+      <form method="POST" action="/predict" class="panel form-panel" novalidate>
+        <section class="form-section" style="margin-top:0;padding-top:0;border-top:0">
+          <div class="form-section-title"><span class="section-number">01</span><div><h3>Personal & income details</h3><p>Basic profile and monthly earning information</p></div></div>
+          <div class="field-grid">
+            <div class="field"><label for="age">Age</label><input id="age" type="number" step="any" min="0" name="age" value="{{ submitted_values.get('age', '') }}" placeholder="e.g. 28" required><span class="field-hint">Age in years</span></div>
+            <div class="field"><label for="annual_income">Annual income</label><input id="annual_income" type="number" step="any" min="0" name="annual_income" value="{{ submitted_values.get('annual_income', '') }}" placeholder="e.g. 75000" required><span class="field-hint">Use the same units as the dataset</span></div>
+            <div class="field"><label for="monthly_salary">Monthly in-hand salary</label><input id="monthly_salary" type="number" step="any" min="0" name="monthly_salary" value="{{ submitted_values.get('monthly_salary', '') }}" placeholder="e.g. 5200" required></div>
+          </div>
+        </section>
+
+        <section class="form-section">
+          <div class="form-section-title"><span class="section-number">02</span><div><h3>Banking & credit</h3><p>Accounts, cards and interest rate information</p></div></div>
+          <div class="field-grid">
+            <div class="field"><label for="num_bank_accounts">Number of bank accounts</label><input id="num_bank_accounts" type="number" step="any" min="0" name="num_bank_accounts" value="{{ submitted_values.get('num_bank_accounts', '') }}" placeholder="e.g. 3" required></div>
+            <div class="field"><label for="num_credit_cards">Number of credit cards</label><input id="num_credit_cards" type="number" step="any" min="0" name="num_credit_cards" value="{{ submitted_values.get('num_credit_cards', '') }}" placeholder="e.g. 2" required></div>
+            <div class="field"><label for="interest_rate">Interest rate (%)</label><input id="interest_rate" type="number" step="any" min="0" name="interest_rate" value="{{ submitted_values.get('interest_rate', '') }}" placeholder="e.g. 12" required></div>
+            <div class="field"><label for="num_loans">Number of loans</label><input id="num_loans" type="number" step="any" min="0" name="num_loans" value="{{ submitted_values.get('num_loans', '') }}" placeholder="e.g. 1" required></div>
+          </div>
+        </section>
+
+        <section class="form-section">
+          <div class="form-section-title"><span class="section-number">03</span><div><h3>Repayment & outstanding balance</h3><p>Payment history and credit utilization signals</p></div></div>
+          <div class="field-grid">
+            <div class="field"><label for="delay_days">Delay from due date (days)</label><input id="delay_days" type="number" step="any" name="delay_days" value="{{ submitted_values.get('delay_days', '') }}" placeholder="e.g. 5" required></div>
+            <div class="field"><label for="delayed_payments">Number of delayed payments</label><input id="delayed_payments" type="number" step="any" min="0" name="delayed_payments" value="{{ submitted_values.get('delayed_payments', '') }}" placeholder="e.g. 2" required></div>
+            <div class="field"><label for="outstanding_debt">Outstanding debt</label><input id="outstanding_debt" type="number" step="any" min="0" name="outstanding_debt" value="{{ submitted_values.get('outstanding_debt', '') }}" placeholder="e.g. 1200" required></div>
+            <div class="field"><label for="credit_utilization">Credit utilization ratio (%)</label><input id="credit_utilization" type="number" step="any" min="0" name="credit_utilization" value="{{ submitted_values.get('credit_utilization', '') }}" placeholder="e.g. 32.5" required><span class="field-hint">Enter the ratio in the format expected by your dataset</span></div>
+          </div>
+        </section>
+        <!-- <div class="form-actions"><button type="submit" class="btn-premium">Predict credit category <span aria-hidden="true">→</span></button><span class="form-note">Check the values before submitting.</span></div> -->
+
+        
+      <div class="form-actions">
+          <button type="submit" class="btn-premium">
+              Predict Credit Category →
+          </button>
+          <p class="dashboard-footnote">
+              Check your values before submitting.
+          </p>
+      </div>
+
+      </form>
+
+      <aside>
+        <div class="panel info-card">
+          <div class="eyebrow">How it works</div>
+          <h3>A clearer view of credit signals.</h3>
+          <p>Your entries are passed to the existing Random Forest classifier. The model returns one of the credit categories learned from the dataset.</p>
+          <div class="feature-list">
+            <div class="feature-row"><span class="feature-check">1</span><div><strong>Enter profile details</strong><span>Complete all required numeric fields using units consistent with the training dataset.</span></div></div>
+            <div class="feature-row"><span class="feature-check">2</span><div><strong>Run the model</strong><span>The same 11 model features are sent in the original feature order.</span></div></div>
+            <div class="feature-row"><span class="feature-check">3</span><div><strong>Review the result</strong><span>The predicted category appears above the form after submission.</span></div></div>
+          </div>
+          <div class="privacy-note"><span aria-hidden="true">ⓘ</span><div><b>Important note</b><br>This project output is an ML estimate, not an official credit score, lending decision, or financial advice. Avoid entering real sensitive personal information.</div></div>
+        </div>
+        <div class="side-cta"><h4>Want to review the dataset?</h4><p>Open the dashboard to review model performance and credit category distribution.</p><a class="btn-outline-premium" href="/dashboard">Open dashboard <span aria-hidden="true">→</span></a></div>
+      </aside>
+    </section>
+  </main>
+  <footer class="footer"><div class="footer-inner"><span><strong>PaisaBazaar</strong> · Credit intelligence project</span><span>Predictions are estimates, not an official credit score.</span></div></footer>
+</div>
+<script>
+// Native browser validation helps users catch missing or malformed entries before submit.
+(() => {
+  const form = document.querySelector('form');
+  if (!form) return;
+  form.addEventListener('submit', (event) => {
+    if (!form.checkValidity()) {
+      event.preventDefault();
+      form.reportValidity();
+    }
+  });
+})();
+</script>
+</body>
+</html>

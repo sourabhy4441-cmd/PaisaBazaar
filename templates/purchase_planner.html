@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#142744">
+  <meta name="description" content="Estimate how long it may take to save for a purchase with PaisaBazaar.">
+  <title>PaisaBazaar | Smart Purchase Planner</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"><link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet">
+</head>
+<body><div class="app-shell">
+<header class="topbar"><div class="topbar-inner"><a class="brand" href="/"><span class="brand-mark">P</span><span><span class="brand-name">PaisaBazaar</span><span class="brand-tag">Credit intelligence</span></span></a><nav class="nav-links" aria-label="Main navigation"><a class="nav-link" href="/">Home</a><a class="nav-link" href="/dashboard">Dashboard</a><a class="nav-link" href="/overview">Overview</a><a class="nav-link" href="/predict">Credit analysis</a><a class="nav-link active" href="/purchase-planner">Purchase planner</a><a class="nav-cta" href="/predict">Run prediction <span aria-hidden="true">↗</span></a></nav></div></header>
+<main class="page-wrap">
+  <div class="page-heading"><div><div class="eyebrow">Turn a wish into a savings goal</div><h1>Plan your next purchase.</h1><p>Estimate how long it could take to save for an iPhone, laptop, bike or another goal.</p></div><div class="date-pill">Savings-based estimate</div></div>
+  <section class="purchase-layout">
+    <form class="panel purchase-form" action="/purchase-planner" method="post">
+      <div class="form-section" style="margin-top:0;padding-top:0;border-top:0"><div class="form-section-title"><span class="section-number">01</span><div><h3>Your purchase goal</h3><p>Tell us what you want to save for.</p></div></div>
+        <div class="field-grid"><div class="field"><label for="product">Product or goal</label><select id="product" name="product" class="premium-select"><option value="iPhone" {% if values.get('product') == 'iPhone' %}selected{% endif %}>iPhone</option><option value="Laptop" {% if values.get('product') == 'Laptop' %}selected{% endif %}>Laptop</option><option value="Bike" {% if values.get('product') == 'Bike' %}selected{% endif %}>Bike</option><option value="Other" {% if values.get('product') == 'Other' %}selected{% endif %}>Other</option></select></div>
+        <div class="field"><label for="price">Target price (₹)</label><input id="price" name="price" type="number" min="1" step="1" value="{{ values.get('price','80000') }}" placeholder="e.g. 80000" required></div></div>
+      </div>
+      <div class="form-section"><div class="form-section-title"><span class="section-number">02</span><div><h3>Your savings</h3><p>Use amounts you can realistically set aside.</p></div></div>
+        <div class="field-grid"><div class="field"><label for="current_savings">Current savings (₹)</label><input id="current_savings" name="current_savings" type="number" min="0" step="1" value="{{ values.get('current_savings','20000') }}" placeholder="e.g. 20000" required></div><div class="field"><label for="monthly_savings">Monthly savings (₹)</label><input id="monthly_savings" name="monthly_savings" type="number" min="1" step="1" value="{{ values.get('monthly_savings','10000') }}" placeholder="e.g. 10000" required><span class="field-hint">Amount left after your regular expenses.</span></div></div>
+      </div>
+      {% if error_message %}<div class="alert-error" role="alert"><strong>Check your values.</strong>{{ error_message }}</div>{% endif %}
+      <div class="form-actions"><button type="submit" class="btn-premium">Calculate my timeline <span aria-hidden="true">→</span></button><span class="form-note">No credit score is used to calculate this timeline.</span></div>
+    </form>
+    <aside class="panel planner-result-panel">
+      <div class="eyebrow">Your estimated timeline</div>
+      {% if result %}
+        <div class="result-product">{{ result.product }}</div>
+        {% if result.months == 0 %}<h2 class="planner-result-number">Goal reached!</h2><p class="planner-result-copy">Your current savings meet or exceed the target price.</p>{% else %}<h2 class="planner-result-number">{{ result.months }} month{% if result.months != 1 %}s{% endif %}</h2><p class="planner-result-copy">Approximately {{ result.days }} days, assuming consistent monthly savings.</p>{% endif %}
+        <div class="planner-money-row"><span>Target price</span><strong>₹{{ "{:,.0f}".format(result.price) }}</strong></div><div class="planner-money-row"><span>Current savings</span><strong>₹{{ "{:,.0f}".format(result.current_savings) }}</strong></div><div class="planner-money-row"><span>Remaining amount</span><strong>₹{{ "{:,.0f}".format(result.remaining) }}</strong></div>
+        <div class="progress-track planner-progress"><div style="width: {{ result.progress }}%"></div></div><div class="progress-caption"><span>{{ result.progress }}% saved</span><span>₹{{ "{:,.0f}".format(result.current_savings) }} / ₹{{ "{:,.0f}".format(result.price) }}</span></div>
+      {% else %}
+        <div class="planner-empty-icon">◷</div><h2 class="planner-result-number">Your goal starts here.</h2><p class="planner-result-copy">Enter a target price and savings amounts to estimate the time you may need.</p><div class="planner-example"><strong>Example</strong><span>₹80,000 target − ₹20,000 saved = ₹60,000 left.</span><span>Saving ₹10,000/month means about 6 months.</span></div>
+      {% endif %}
+      <div class="privacy-note"><span aria-hidden="true">ⓘ</span><div><b>Estimate, not a guarantee</b><br>This simple calculation assumes your monthly savings remain consistent. It does not include emergencies, interest, inflation or changes in product price.</div></div>
+    </aside>
+  </section>
+  <section class="panel planner-note-panel"><h3>How we calculate it</h3><p>Remaining amount = target price − current savings. Estimated months = remaining amount divided by monthly savings, rounded up to the next whole month. Credit category predictions are separate and do not determine this savings timeline.</p></section>
+</main><footer class="footer"><div class="footer-inner"><span><strong>PaisaBazaar</strong> · Smart purchase planner</span><span>For educational planning only.</span></div></footer>
+</div></body></html>

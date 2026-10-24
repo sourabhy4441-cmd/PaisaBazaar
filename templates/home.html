@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#142744">
+  <meta name="description" content="Explore credit intelligence and plan your next purchase with PaisaBazaar.">
+  <title>PaisaBazaar | Plan smarter, live better</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet">
+</head>
+<body>
+<div class="app-shell">
+  <header class="topbar"><div class="topbar-inner">
+    <a class="brand" href="/" aria-label="PaisaBazaar home"><span class="brand-mark">P</span><span><span class="brand-name">PaisaBazaar</span><span class="brand-tag">Credit intelligence</span></span></a>
+    <nav class="nav-links" aria-label="Main navigation">
+      <a class="nav-link active" href="/">Home</a><a class="nav-link" href="/dashboard">Dashboard</a><a class="nav-link" href="/overview">Overview</a><a class="nav-link" href="/predict">Credit analysis</a><a class="nav-link" href="/purchase-planner">Purchase planner</a><a class="nav-cta" href="/predict">Run prediction <span aria-hidden="true">↗</span></a>
+    </nav>
+  </div></header>
+
+  <main class="page-wrap home-wrap">
+    <section class="home-hero">
+      <div class="home-hero-copy">
+        <div class="eyebrow">Plan smarter, live better</div>
+        <h1>Your credit profile.<br><span>Your future goals.</span></h1>
+        <p>Understand your predicted credit category, explore your financial signals, and plan how soon you could afford the things you love.</p>
+        <div class="home-actions"><a class="btn-premium" href="/predict">Check my credit profile <span aria-hidden="true">→</span></a><a class="btn-secondary-premium" href="/purchase-planner">Plan a purchase <span aria-hidden="true">→</span></a></div>
+        <div class="home-benefits"><div><span class="benefit-icon">✦</span><span>AI-powered<br>credit prediction</span></div><div><span class="benefit-icon">₹</span><span>Smart purchase<br>planning</span></div><div><span class="benefit-icon">✓</span><span>Understand your<br>financial health</span></div></div>
+      </div>
+      <div class="home-hero-art" aria-label="Plan your financial goals">
+        <div class="orbit orbit-one"></div><div class="orbit orbit-two"></div>
+        <div class="phone-illustration"><div class="phone-screen"><div class="phone-speaker"></div><div class="phone-camera"></div><div class="phone-lines"></div><div class="phone-button">₹</div></div></div>
+        <div class="floating-card credit-float"><span class="float-symbol green-symbol">↗</span><div><small>Credit category</small><strong>Model estimate</strong><span class="float-caption">Based on your inputs</span></div></div>
+        <div class="floating-card goal-float"><span class="float-symbol gold-symbol">◷</span><div><small>Purchase goal</small><strong>Build your plan</strong><span class="float-caption">One step at a time</span></div></div>
+      </div>
+    </section>
+
+    <section class="planner-preview panel" aria-labelledby="planner-title">
+      <div class="planner-intro"><div class="eyebrow">Smart purchase planner</div><h2 id="planner-title">How soon can you buy your dream product?</h2><p>Set a savings goal for an iPhone, laptop, bike or anything else. Estimate the time needed using your current and monthly savings.</p><a class="text-link" href="/purchase-planner">Open purchase planner <span aria-hidden="true">→</span></a></div>
+      <form class="planner-mini-form" action="/purchase-planner" method="get">
+        <div class="field"><label for="home_product">What do you want to buy?</label><select id="home_product" name="product" class="premium-select"><option value="iPhone">iPhone</option><option value="Laptop">Laptop</option><option value="Bike">Bike</option><option value="Other">Other purchase</option></select></div>
+        <div class="field"><label for="home_price">Target price (₹)</label><input id="home_price" type="number" name="price" min="1" step="1" placeholder="e.g. 80000" required></div>
+        <div class="field"><label for="home_saved">Current savings (₹)</label><input id="home_saved" type="number" name="current_savings" min="0" step="1" placeholder="e.g. 20000" value="0" required></div>
+        <div class="field"><label for="home_monthly">Monthly savings (₹)</label><input id="home_monthly" type="number" name="monthly_savings" min="1" step="1" placeholder="e.g. 10000" required></div>
+        <button type="submit" class="btn-premium full-width">Estimate my timeline <span aria-hidden="true">→</span></button>
+        <small class="form-note">Estimate only; assumes your monthly savings remain consistent.</small>
+      </form>
+      <div class="planner-art-card"><div class="product-placeholder"><span>PHONE</span><div class="product-camera"></div><div class="product-lens lens-a"></div><div class="product-lens lens-b"></div></div><div class="product-card-copy"><small>YOUR NEXT GOAL</small><h3>Save with a plan.</h3><p>Track the gap between what you have and what you need.</p></div><div class="sample-progress"><div><span>Example savings progress</span><strong>25%</strong></div><div class="progress-track"><div style="width:25%"></div></div></div></div>
+    </section>
+
+    <section class="home-feature-grid" aria-label="PaisaBazaar tools">
+      <article class="home-feature feature-blue"><span class="feature-icon-large">▣</span><h3>Predict your credit category</h3><p>Use your financial inputs with the existing Random Forest model to estimate a credit category.</p><a href="/predict">Try credit analysis <span>→</span></a></article>
+      <article class="home-feature feature-gold"><span class="feature-icon-large">₹</span><h3>Plan your purchases</h3><p>Estimate how long it may take to afford a phone, laptop, bike or another goal through savings.</p><a href="/purchase-planner">Open purchase planner <span>→</span></a></article>
+      <article class="home-feature feature-green"><span class="feature-icon-large">▥</span><h3>Explore data and insights</h3><p>Review dataset statistics, credit category distribution and model evaluation information.</p><a href="/dashboard">View dashboard <span>→</span></a></article>
+    </section>
+
+    <section class="home-stats" aria-label="Dataset statistics"><div class="home-stat"><span class="stat-icon">▦</span><div><strong>{{ "{:,}".format(total_customers) }}</strong><span>Dataset records</span></div></div><div class="home-stat"><span class="stat-icon">▤</span><div><strong>{{ dataset_columns }}</strong><span>Dataset fields</span></div></div><div class="home-stat"><span class="stat-icon gold">₹</span><div><strong>{{ "{:,.0f}".format(avg_income) }}</strong><span>Average annual income*</span></div></div><div class="home-stat"><span class="stat-icon">↗</span><div><strong>ML-powered</strong><span>Credit category estimate</span></div></div></section>
+    <p class="home-disclaimer">*Income units are shown as supplied in the source dataset. Credit predictions are educational model estimates, not official credit scores or lending decisions. Purchase timelines depend on the values you enter.</p>
+  </main>
+  <footer class="footer"><div class="footer-inner"><span><strong>PaisaBazaar</strong> · Credit intelligence and purchase planning</span><span>Built for learning and demonstration.</span></div></footer>
+</div>
+</body>
+</html>

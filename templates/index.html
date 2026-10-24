@@ -1,0 +1,184 @@
+<!-- <!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#142744">
+  <meta name="description" content="PaisaBazaar credit score analytics dashboard.">
+  <title>PaisaBazaar | Credit Intelligence</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet">
+</head>
+<body>
+<div class="app-shell">
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="/" aria-label="PaisaBazaar home">
+        <span class="brand-mark">P</span><span><span class="brand-name">PaisaBazaar</span><span class="brand-tag">Credit intelligence</span></span>
+      </a>
+      <nav class="nav-links" aria-label="Main navigation">
+        <a class="nav-link" href="/dashboard">Dashboard</a>
+        <a class="nav-link active" href="/">Overview</a>
+        <a class="nav-link" href="/predict">Credit analysis</a>
+        <a class="nav-cta" href="/predict">Run prediction <span aria-hidden="true">↗</span></a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="page-wrap">
+    <div class="page-heading">
+      <div>
+        <div class="eyebrow">Your financial overview</div>
+        <h1>Credit intelligence, made clear.</h1>
+        <p>A concise view of your dataset and a simple way to explore the credit score prediction model.</p>
+      </div>
+      <div class="date-pill"><span aria-hidden="true">◷</span> Dataset overview</div>
+    </div>
+
+    <section class="hero-panel" aria-labelledby="hero-title">
+      <div class="hero-content">
+        <div class="hero-kicker">Smarter insights start here</div>
+        <h2 id="hero-title">Understand the signals<br>behind a credit profile.</h2>
+        <p>Explore the dataset, review key indicators, and use the Random Forest model to generate a predicted credit category.</p>
+        <a class="btn-premium" href="/predict">Explore credit prediction <span aria-hidden="true">→</span></a>
+      </div>
+      <div class="hero-emblem" aria-hidden="true">⌁</div>
+    </section>
+
+    <section class="stats-grid" aria-label="Dataset summary">
+      <article class="stat-card">
+        <div class="stat-icon">▦</div><div><div class="stat-label">Total dataset records</div><div class="stat-value">{{ "{:,}".format(total_customers) }}</div><div class="stat-note">Rows loaded from dataset-2.csv</div></div>
+      </article>
+      <article class="stat-card">
+        <div class="stat-icon gold">₹</div><div><div class="stat-label">Average annual income</div><div class="stat-value">{{ "{:,.2f}".format(avg_income) }}</div><div class="stat-note">Dataset currency/unit as provided</div></div>
+      </article>
+      <article class="stat-card">
+        <div class="stat-icon">▤</div><div><div class="stat-label">Dataset fields</div><div class="stat-value">{{ dataset_columns }}</div><div class="stat-note">Columns available in source data</div></div>
+      </article>
+    </section>
+
+    <section class="content-grid">
+      <article class="panel">
+        <div class="panel-head"><div><h3>Dataset preview</h3><p>A quick look at the first 10 records in your source file.</p></div><span class="subtle-tag">Live dataset</span></div>
+        <div class="table-wrap">{{ table | safe }}</div>
+        <div class="table-foot"><span>Showing first 10 records</span><span>Source: dataset-2.csv</span></div>
+      </article>
+      <aside class="panel">
+        <div class="panel-head"><div><h3>Explore PaisaBazaar</h3><p>Tools available in this project</p></div></div>
+        <div class="panel-body">
+          <div class="feature-list">
+            <div class="feature-row"><span class="feature-check">✓</span><div><strong>Dataset overview</strong><span>Review a sample of the data used by the project.</span></div></div>
+            <div class="feature-row"><span class="feature-check">✓</span><div><strong>11 model inputs</strong><span>Enter income, account, loan, payment and utilization details.</span></div></div>
+            <div class="feature-row"><span class="feature-check">✓</span><div><strong>Random Forest model</strong><span>Generate a predicted category from the trained classifier.</span></div></div>
+          </div>
+          <div class="side-cta"><h4>Ready to run an analysis?</h4><p>Enter a financial profile and see the model's predicted credit category.</p><a class="btn-outline-premium" href="/predict">Open prediction form <span aria-hidden="true">→</span></a></div>
+        </div>
+      </aside>
+    </section>
+  </main>
+  <footer class="footer"><div class="footer-inner"><span><strong>PaisaBazaar</strong> · Credit intelligence project</span><span>Model predictions are estimates, not financial advice or an official credit score.</span></div></footer>
+</div>
+</body>
+</html> -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#142744">
+  <meta name="description" content="PaisaBazaar credit score analytics dashboard.">
+  <title>PaisaBazaar | Credit Intelligence</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet">
+</head>
+<body>
+<div class="app-shell">
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="/" aria-label="PaisaBazaar home">
+        <span class="brand-mark">P</span><span><span class="brand-name">PaisaBazaar</span><span class="brand-tag">Credit intelligence</span></span>
+      </a>
+      <nav class="nav-links" aria-label="Main navigation">
+        <a class="nav-link" href="/">Home</a>
+        <a class="nav-link" href="/dashboard">Dashboard</a>
+        <a class="nav-link active" href="/overview">Overview</a>
+        <a class="nav-link" href="/predict">Credit analysis</a>
+        <a class="nav-link" href="/purchase-planner">Purchase planner</a>
+        <a class="nav-cta" href="/predict">Run prediction <span aria-hidden="true">↗</span></a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="page-wrap">
+    <div class="page-heading">
+      <div>
+        <div class="eyebrow">Your financial overview</div>
+        <h1>Credit intelligence, made clear.</h1>
+        <p>A concise view of your dataset and a simple way to explore the credit score prediction model.</p>
+      </div>
+      <div class="date-pill"><span aria-hidden="true">◷</span> Dataset overview</div>
+    </div>
+
+    <section class="hero-panel" aria-labelledby="hero-title">
+      <div class="hero-content">
+        <div class="hero-kicker">Smarter insights start here</div>
+        <h2 id="hero-title">Understand the signals<br>behind a credit profile.</h2>
+        <p>Explore the dataset, review key indicators, and use the Random Forest model to generate a predicted credit category.</p>
+        <a class="btn-premium" href="/predict">Explore credit prediction <span aria-hidden="true">→</span></a>
+      </div>
+      <div class="hero-emblem" aria-hidden="true">⌁</div>
+    </section>
+
+    <section class="stats-grid" aria-label="Dataset summary">
+      <article class="stat-card">
+        <div class="stat-icon">▦</div><div><div class="stat-label">Total dataset records</div><div class="stat-value">{{ "{:,}".format(total_customers) }}</div><div class="stat-note">Rows loaded from dataset-2.csv</div></div>
+      </article>
+      <article class="stat-card">
+        <div class="stat-icon gold">₹</div><div><div class="stat-label">Average annual income</div><div class="stat-value">{{ "{:,.2f}".format(avg_income) }}</div><div class="stat-note">Dataset currency/unit as provided</div></div>
+      </article>
+      <article class="stat-card">
+        <div class="stat-icon">▤</div><div><div class="stat-label">Dataset fields</div><div class="stat-value">{{ dataset_columns }}</div><div class="stat-note">Columns available in source data</div></div>
+      </article>
+    </section>
+
+    <section class="content-grid">
+      <article class="panel">
+        <div class="panel-head"><div><h3>Dataset preview</h3><p>A quick look at the first 10 records in your source file.</p></div><span class="subtle-tag">Live dataset</span></div>
+        <div class="table-wrap">{{ table | safe }}</div>
+        <div class="table-foot"><span>Showing first 10 records</span><span>Source: dataset-2.csv</span></div>
+      </article>
+      <aside class="panel">
+        <div class="panel-head"><div><h3>Explore PaisaBazaar</h3><p>Tools available in this project</p></div></div>
+        <div class="panel-body">
+          <div class="feature-list">
+            <div class="feature-row"><span class="feature-check">✓</span><div><strong>Dataset overview</strong><span>Review a sample of the data used by the project.</span></div></div>
+            <div class="feature-row"><span class="feature-check">✓</span><div><strong>11 model inputs</strong><span>Enter income, account, loan, payment and utilization details.</span></div></div>
+            <div class="feature-row"><span class="feature-check">✓</span><div><strong>Random Forest model</strong><span>Generate a predicted category from the trained classifier.</span></div></div>
+          </div>
+          <div class="side-cta"><h4>Ready to run an analysis?</h4><p>Enter a financial profile and see the model's predicted credit category.</p><a class="btn-outline-premium" href="/predict">Open prediction form <span aria-hidden="true">→</span></a></div>
+        </div>
+      </aside>
+    </section>
+  </main>
+  <footer class="footer"><div class="footer-inner"><span><strong>PaisaBazaar</strong> · Credit intelligence project</span><span>Model predictions are estimates, not financial advice or an official credit score.</span></div></footer>
+</div>
+</body>
+</html>
